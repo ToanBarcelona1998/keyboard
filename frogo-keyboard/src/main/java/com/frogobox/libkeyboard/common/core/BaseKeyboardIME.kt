@@ -234,14 +234,24 @@ abstract class BaseKeyboardIME<VB : ViewBinding> : InputMethodService(), OnKeybo
                 }
 
                 val selectedText = inputConnection.getSelectedText(0)
+
                 if (TextUtils.isEmpty(selectedText)) {
-                    inputConnection.sendKeyEvent(
-                        KeyEvent(
-                            KeyEvent.ACTION_DOWN,
-                            KeyEvent.KEYCODE_DEL
+
+                    val currentText = inputConnection.getExtractedText(ExtractedTextRequest(), 0).text
+
+                    val cTextLength = currentText.length
+
+                    if(cTextLength == 3 && currentText.startsWith(BUFFTER_FLY_LEFT)  && currentText.endsWith(BUFFTER_FLY_RIGHT)){
+                        inputConnection.deleteSurroundingText(cTextLength, cTextLength)
+                    }else{
+                        inputConnection.sendKeyEvent(
+                            KeyEvent(
+                                KeyEvent.ACTION_DOWN,
+                                KeyEvent.KEYCODE_DEL
+                            )
                         )
-                    )
-                    inputConnection.sendKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL))
+                        inputConnection.sendKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL))
+                    }
                 } else {
                     inputConnection.commitText("", 1)
                 }
@@ -349,7 +359,8 @@ abstract class BaseKeyboardIME<VB : ViewBinding> : InputMethodService(), OnKeybo
 
 
                 if(needSetNewCursorPos){
-                    inputConnection.setSelection(commitText.length - 1 , commitText.length - 1)
+                    val textWithoutBPos  = originalText.length - 1
+                    inputConnection.setSelection(textWithoutBPos , textWithoutBPos)
                 }
 
                 if (keyboard!!.mShiftState == SHIFT_ON_ONE_CHAR && keyboardMode == KEYBOARD_LETTERS) {
@@ -400,7 +411,7 @@ abstract class BaseKeyboardIME<VB : ViewBinding> : InputMethodService(), OnKeybo
     ) {
 
         // Move pos when needed
-        var currentText = currentInputConnection.getExtractedText(ExtractedTextRequest(), 0).text
+        val currentText = currentInputConnection.getExtractedText(ExtractedTextRequest(), 0).text
 
         val textWithoutBPos  = currentText.length - 1
 
