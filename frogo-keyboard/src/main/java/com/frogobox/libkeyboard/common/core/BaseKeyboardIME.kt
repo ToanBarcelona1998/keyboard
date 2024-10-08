@@ -321,14 +321,29 @@ abstract class BaseKeyboardIME<VB : ViewBinding> : InputMethodService(), OnKeybo
                 // If the keyboard is set to symbols and the user presses space, we usually should switch back to the letters keyboard.
                 // However, avoid doing that in cases when the EditText for example requires numbers as the input.
                 // We can detect that by the text not changing on pressing Space.
+                val originalText =
+                    inputConnection.getExtractedText(ExtractedTextRequest(), 0)?.text ?: return
+
+                var commitText = codeChar.toString()
+
+                var isSetCursor = false
+
+                // Just add emoij to this text once
+                if(originalText == "" && codeChar.isLetter()){
+                    commitText = "꧁$commitText꧂"
+                    isSetCursor = true
+                }
+
                 if (keyboardMode != KEYBOARD_LETTERS && code == ItemMainKeyboard.KEYCODE_SPACE) {
-                    val originalText =
-                        inputConnection.getExtractedText(ExtractedTextRequest(), 0)?.text ?: return
-                    inputConnection.commitText(codeChar.toString(), 1)
+                    inputConnection.commitText(commitText, 1)
                     val newText = inputConnection.getExtractedText(ExtractedTextRequest(), 0).text
                     switchToLetters = originalText != newText
                 } else {
-                    inputConnection.commitText(codeChar.toString(), 1)
+                    inputConnection.commitText(commitText, 1)
+                }
+
+                if(isSetCursor){
+                    inputConnection.setSelection(commitText.length - 1 , commitText.length - 1)
                 }
 
                 if (keyboard!!.mShiftState == SHIFT_ON_ONE_CHAR && keyboardMode == KEYBOARD_LETTERS) {
