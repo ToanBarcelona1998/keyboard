@@ -29,19 +29,20 @@ class KeyboardUtil @Inject constructor(
     }
 
     fun menuToggle(): List<KeyboardFeatureModel> {
-        return listOf(
-            KeyboardFeatureType.AUTO_TEXT.mapToModel(),
-            KeyboardFeatureType.TEMPLATE_TEXT_APP.mapToModel(),
-            KeyboardFeatureType.TEMPLATE_TEXT_GAME.mapToModel(),
-            KeyboardFeatureType.TEMPLATE_TEXT_LOVE.mapToModel(),
-            KeyboardFeatureType.TEMPLATE_TEXT_GREETING.mapToModel(),
-            KeyboardFeatureType.NEWS.mapToModel(),
-            KeyboardFeatureType.MOVIE.mapToModel(),
-            KeyboardFeatureType.WEB.mapToModel(),
-            KeyboardFeatureType.FORM.mapToModel(),
-            KeyboardFeatureType.CHANGE_KEYBOARD.mapToModel(),
-            KeyboardFeatureType.SETTING.mapToModel(),
-        ).sortedBy { getStateToggle(it.id) }
+        return listOf()
+//        return listOf(
+//            KeyboardFeatureType.AUTO_TEXT.mapToModel(),
+//            KeyboardFeatureType.TEMPLATE_TEXT_APP.mapToModel(),
+//            KeyboardFeatureType.TEMPLATE_TEXT_GAME.mapToModel(),
+//            KeyboardFeatureType.TEMPLATE_TEXT_LOVE.mapToModel(),
+//            KeyboardFeatureType.TEMPLATE_TEXT_GREETING.mapToModel(),
+//            KeyboardFeatureType.NEWS.mapToModel(),
+//            KeyboardFeatureType.MOVIE.mapToModel(),
+//            KeyboardFeatureType.WEB.mapToModel(),
+//            KeyboardFeatureType.FORM.mapToModel(),
+//            KeyboardFeatureType.CHANGE_KEYBOARD.mapToModel(),
+//            KeyboardFeatureType.SETTING.mapToModel(),
+//        ).sortedBy { getStateToggle(it.id) }
     }
 
     fun menuKeyboard(): List<KeyboardFeatureModel> {

@@ -8,6 +8,7 @@ import android.text.InputType.TYPE_CLASS_NUMBER
 import android.text.InputType.TYPE_CLASS_PHONE
 import android.text.InputType.TYPE_MASK_CLASS
 import android.text.TextUtils
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -28,6 +29,10 @@ import com.frogobox.libkeyboard.ui.main.OnKeyboardActionListener
 
 // based on https://www.androidauthority.com/lets-build-custom-keyboard-android-832362/
 abstract class BaseKeyboardIME<VB : ViewBinding> : InputMethodService(), OnKeyboardActionListener, IKeyboardIME {
+
+    private val BUFFTER_FLY_RIGHT = "꧂";
+    private val BUFFTER_FLY_LEFT = "꧁";
+
 
     // how quickly do we have to doubletap shift to enable permanent caps lock
     var SHIFT_PERM_TOGGLE_SPEED = 500
@@ -229,14 +234,24 @@ abstract class BaseKeyboardIME<VB : ViewBinding> : InputMethodService(), OnKeybo
                 }
 
                 val selectedText = inputConnection.getSelectedText(0)
+
                 if (TextUtils.isEmpty(selectedText)) {
-                    inputConnection.sendKeyEvent(
-                        KeyEvent(
-                            KeyEvent.ACTION_DOWN,
-                            KeyEvent.KEYCODE_DEL
+
+                    val currentText = inputConnection.getExtractedText(ExtractedTextRequest(), 0).text
+
+                    val cTextLength = currentText.length
+
+                    if(cTextLength == 3 && currentText.startsWith(BUFFTER_FLY_LEFT)  && currentText.endsWith(BUFFTER_FLY_RIGHT)){
+                        inputConnection.deleteSurroundingText(cTextLength, cTextLength)
+                    }else{
+                        inputConnection.sendKeyEvent(
+                            KeyEvent(
+                                KeyEvent.ACTION_DOWN,
+                                KeyEvent.KEYCODE_DEL
+                            )
                         )
-                    )
-                    inputConnection.sendKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL))
+                        inputConnection.sendKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL))
+                    }
                 } else {
                     inputConnection.commitText("", 1)
                 }
@@ -321,14 +336,31 @@ abstract class BaseKeyboardIME<VB : ViewBinding> : InputMethodService(), OnKeybo
                 // If the keyboard is set to symbols and the user presses space, we usually should switch back to the letters keyboard.
                 // However, avoid doing that in cases when the EditText for example requires numbers as the input.
                 // We can detect that by the text not changing on pressing Space.
+                val originalText =
+                    inputConnection.getExtractedText(ExtractedTextRequest(), 0)?.text ?: return
+
+                var commitText = codeChar.toString()
+
+                var needSetNewCursorPos = false
+
+                // Just add emoij to this text once
+                if(originalText == "" && codeChar.isLetter()){
+                    commitText = "$BUFFTER_FLY_LEFT$commitText$BUFFTER_FLY_RIGHT"
+                    needSetNewCursorPos = true
+                }
+
                 if (keyboardMode != KEYBOARD_LETTERS && code == ItemMainKeyboard.KEYCODE_SPACE) {
-                    val originalText =
-                        inputConnection.getExtractedText(ExtractedTextRequest(), 0)?.text ?: return
-                    inputConnection.commitText(codeChar.toString(), 1)
+                    inputConnection.commitText(commitText, 1)
                     val newText = inputConnection.getExtractedText(ExtractedTextRequest(), 0).text
                     switchToLetters = originalText != newText
                 } else {
-                    inputConnection.commitText(codeChar.toString(), 1)
+                    inputConnection.commitText(commitText, 1)
+                }
+
+
+                if(needSetNewCursorPos){
+                    val textWithoutBPos  = originalText.length - 1
+                    inputConnection.setSelection(textWithoutBPos , textWithoutBPos)
                 }
 
                 if (keyboard!!.mShiftState == SHIFT_ON_ONE_CHAR && keyboardMode == KEYBOARD_LETTERS) {
@@ -346,6 +378,7 @@ abstract class BaseKeyboardIME<VB : ViewBinding> : InputMethodService(), OnKeybo
     override fun moveCursor(moveRight: Boolean) {
         val extractedText =
             currentInputConnection?.getExtractedText(ExtractedTextRequest(), 0) ?: return
+
         var newCursorPosition = extractedText.selectionStart
         newCursorPosition = if (moveRight) {
             newCursorPosition + 1
@@ -368,4 +401,37 @@ abstract class BaseKeyboardIME<VB : ViewBinding> : InputMethodService(), OnKeybo
         return R.xml.keys_letters_qwerty
     }
 
+    override fun onUpdateSelection(
+        oldSelStart: Int,
+        oldSelEnd: Int,
+        newSelStart: Int,
+        newSelEnd: Int,
+        candidatesStart: Int,
+        candidatesEnd: Int
+    ) {
+
+        // Move pos when needed
+        val currentText = currentInputConnection.getExtractedText(ExtractedTextRequest(), 0).text
+
+        val textWithoutBPos  = currentText.length - 1
+
+        if(currentText.endsWith(BUFFTER_FLY_RIGHT) && newSelEnd > textWithoutBPos){
+            currentInputConnection.setSelection(textWithoutBPos , textWithoutBPos)
+        }
+
+        if(currentText.startsWith(BUFFTER_FLY_LEFT) && newSelStart == 0){
+            currentInputConnection.setSelection(1 , 1)
+        }
+        //
+
+        super.onUpdateSelection(
+            oldSelStart,
+            oldSelEnd,
+            newSelStart,
+            newSelEnd,
+            candidatesStart,
+            candidatesEnd
+        )
+
+    }
 }
