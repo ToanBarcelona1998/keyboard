@@ -8,6 +8,7 @@ import android.text.InputType.TYPE_CLASS_NUMBER
 import android.text.InputType.TYPE_CLASS_PHONE
 import android.text.InputType.TYPE_MASK_CLASS
 import android.text.TextUtils
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -28,6 +29,10 @@ import com.frogobox.libkeyboard.ui.main.OnKeyboardActionListener
 
 // based on https://www.androidauthority.com/lets-build-custom-keyboard-android-832362/
 abstract class BaseKeyboardIME<VB : ViewBinding> : InputMethodService(), OnKeyboardActionListener, IKeyboardIME {
+
+    private val BUFFTER_FLY_RIGHT = "꧂";
+    private val BUFFTER_FLY_LEFT = "꧁";
+
 
     // how quickly do we have to doubletap shift to enable permanent caps lock
     var SHIFT_PERM_TOGGLE_SPEED = 500
@@ -326,12 +331,12 @@ abstract class BaseKeyboardIME<VB : ViewBinding> : InputMethodService(), OnKeybo
 
                 var commitText = codeChar.toString()
 
-                var isSetCursor = false
+                var needSetNewCursorPos = false
 
                 // Just add emoij to this text once
                 if(originalText == "" && codeChar.isLetter()){
-                    commitText = "꧁$commitText꧂"
-                    isSetCursor = true
+                    commitText = "$BUFFTER_FLY_LEFT$commitText$BUFFTER_FLY_RIGHT"
+                    needSetNewCursorPos = true
                 }
 
                 if (keyboardMode != KEYBOARD_LETTERS && code == ItemMainKeyboard.KEYCODE_SPACE) {
@@ -342,7 +347,8 @@ abstract class BaseKeyboardIME<VB : ViewBinding> : InputMethodService(), OnKeybo
                     inputConnection.commitText(commitText, 1)
                 }
 
-                if(isSetCursor){
+
+                if(needSetNewCursorPos){
                     inputConnection.setSelection(commitText.length - 1 , commitText.length - 1)
                 }
 
@@ -361,6 +367,7 @@ abstract class BaseKeyboardIME<VB : ViewBinding> : InputMethodService(), OnKeybo
     override fun moveCursor(moveRight: Boolean) {
         val extractedText =
             currentInputConnection?.getExtractedText(ExtractedTextRequest(), 0) ?: return
+
         var newCursorPosition = extractedText.selectionStart
         newCursorPosition = if (moveRight) {
             newCursorPosition + 1
@@ -383,4 +390,37 @@ abstract class BaseKeyboardIME<VB : ViewBinding> : InputMethodService(), OnKeybo
         return R.xml.keys_letters_qwerty
     }
 
+    override fun onUpdateSelection(
+        oldSelStart: Int,
+        oldSelEnd: Int,
+        newSelStart: Int,
+        newSelEnd: Int,
+        candidatesStart: Int,
+        candidatesEnd: Int
+    ) {
+
+        // Move pos when needed
+        var currentText = currentInputConnection.getExtractedText(ExtractedTextRequest(), 0).text
+
+        val textWithoutBPos  = currentText.length - 1
+
+        if(currentText.endsWith(BUFFTER_FLY_RIGHT) && newSelEnd > textWithoutBPos){
+            currentInputConnection.setSelection(textWithoutBPos , textWithoutBPos)
+        }
+
+        if(currentText.startsWith(BUFFTER_FLY_LEFT) && newSelStart == 0){
+            currentInputConnection.setSelection(1 , 1)
+        }
+        //
+
+        super.onUpdateSelection(
+            oldSelStart,
+            oldSelEnd,
+            newSelStart,
+            newSelEnd,
+            candidatesStart,
+            candidatesEnd
+        )
+
+    }
 }
