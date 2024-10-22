@@ -36,3 +36,5 @@ class AutoGridLayoutManager(
         super.onLayoutChildren(recycler, state)
     }
 }
+
+class FunnyTextGridLayoutManager(context: Context) : GridLayoutManager(context , 2)

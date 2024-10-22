@@ -54,17 +54,30 @@ fun parseRawEmojiSpecsFile(context: Context, path: String): MutableList<String> 
     return emojis
 }
 
-fun getEmojiCategory() : List<EmojiCategory>  {
+fun getSubEmojiCategory(id: Int) : List<SubEmojiCategory>  {
+    val category =  listOf(
+        SubEmojiCategory(SubEmojiCategoryType.GENERAL.icon, SubEmojiCategoryType.GENERAL.icon, SubEmojiCategoryType.GENERAL.path, SubEmojiCategoryType.GENERAL.parentId),
+        SubEmojiCategory(SubEmojiCategoryType.SMILEYS_EMOTION.icon, SubEmojiCategoryType.SMILEYS_EMOTION.icon, SubEmojiCategoryType.SMILEYS_EMOTION.path, SubEmojiCategoryType.SMILEYS_EMOTION.parentId),
+        SubEmojiCategory(SubEmojiCategoryType.PEOPLE_BODY.icon, SubEmojiCategoryType.PEOPLE_BODY.icon, SubEmojiCategoryType.PEOPLE_BODY.path,SubEmojiCategoryType.PEOPLE_BODY.parentId),
+        SubEmojiCategory(SubEmojiCategoryType.ACTIVITIES.icon, SubEmojiCategoryType.ACTIVITIES.icon, SubEmojiCategoryType.ACTIVITIES.path,SubEmojiCategoryType.ACTIVITIES.parentId),
+        SubEmojiCategory(SubEmojiCategoryType.ANIMAL_NATURE.icon, SubEmojiCategoryType.ANIMAL_NATURE.icon, SubEmojiCategoryType.ANIMAL_NATURE.path,SubEmojiCategoryType.ANIMAL_NATURE.parentId),
+        SubEmojiCategory(SubEmojiCategoryType.FOOD_DRINK.icon, SubEmojiCategoryType.FOOD_DRINK.icon, SubEmojiCategoryType.FOOD_DRINK.path,SubEmojiCategoryType.FOOD_DRINK.parentId),
+        SubEmojiCategory(SubEmojiCategoryType.FLAG.icon, SubEmojiCategoryType.FLAG.icon, SubEmojiCategoryType.FLAG.path,SubEmojiCategoryType.FLAG.parentId),
+        SubEmojiCategory(SubEmojiCategoryType.OBJECTS.icon, SubEmojiCategoryType.OBJECTS.icon, SubEmojiCategoryType.OBJECTS.path,SubEmojiCategoryType.OBJECTS.parentId),
+        SubEmojiCategory(SubEmojiCategoryType.TRAVEL_PLACES.icon, SubEmojiCategoryType.TRAVEL_PLACES.icon, SubEmojiCategoryType.TRAVEL_PLACES.path,SubEmojiCategoryType.TRAVEL_PLACES.parentId),
+        SubEmojiCategory(SubEmojiCategoryType.SYMBOLS.icon, SubEmojiCategoryType.SYMBOLS.icon, SubEmojiCategoryType.SYMBOLS.path,SubEmojiCategoryType.SYMBOLS.parentId),
+        SubEmojiCategory(SubEmojiCategoryType.HAPPY.icon, SubEmojiCategoryType.HAPPY.icon, SubEmojiCategoryType.HAPPY.path,SubEmojiCategoryType.HAPPY.parentId),
+        SubEmojiCategory(SubEmojiCategoryType.ANGRY.icon, SubEmojiCategoryType.ANGRY.icon, SubEmojiCategoryType.ANGRY.path,SubEmojiCategoryType.ANGRY.parentId),
+    )
+
+    return category.filter {
+        it.parentId == id
+    }
+}
+
+fun getEmojiCategory() : List<EmojiCategory>{
     return listOf(
-        EmojiCategory(EmojiCategoryType.GENERAL.name, EmojiCategoryType.GENERAL.icon, EmojiCategoryType.GENERAL.path),
-        EmojiCategory(EmojiCategoryType.SMILEYS_EMOTION.name, EmojiCategoryType.SMILEYS_EMOTION.icon, EmojiCategoryType.SMILEYS_EMOTION.path),
-        EmojiCategory(EmojiCategoryType.PEOPLE_BODY.name, EmojiCategoryType.PEOPLE_BODY.icon, EmojiCategoryType.PEOPLE_BODY.path),
-        EmojiCategory(EmojiCategoryType.ACTIVITIES.name, EmojiCategoryType.ACTIVITIES.icon, EmojiCategoryType.ACTIVITIES.path),
-        EmojiCategory(EmojiCategoryType.ANIMAL_NATURE.name, EmojiCategoryType.ANIMAL_NATURE.icon, EmojiCategoryType.ANIMAL_NATURE.path),
-        EmojiCategory(EmojiCategoryType.FOOD_DRINK.name, EmojiCategoryType.FOOD_DRINK.icon, EmojiCategoryType.FOOD_DRINK.path),
-        EmojiCategory(EmojiCategoryType.FLAG.name, EmojiCategoryType.FLAG.icon, EmojiCategoryType.FLAG.path),
-        EmojiCategory(EmojiCategoryType.OBJECTS.name, EmojiCategoryType.OBJECTS.icon, EmojiCategoryType.OBJECTS.path),
-        EmojiCategory(EmojiCategoryType.TRAVEL_PLACES.name, EmojiCategoryType.TRAVEL_PLACES.icon, EmojiCategoryType.TRAVEL_PLACES.path),
-        EmojiCategory(EmojiCategoryType.SYMBOLS.name, EmojiCategoryType.SYMBOLS.icon, EmojiCategoryType.SYMBOLS.path)
+        EmojiCategory(EmojiCategoryType.Emoji.id,EmojiCategoryType.Emoji.name,EmojiCategoryType.Emoji.icon),
+        EmojiCategory(EmojiCategoryType.FunnyText.id,EmojiCategoryType.FunnyText.name,EmojiCategoryType.FunnyText.icon),
     )
 }

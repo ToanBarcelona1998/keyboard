@@ -14,7 +14,14 @@ import androidx.annotation.Keep
 
 @Keep
 data class EmojiCategory(
+    val id: Int,
     val name: String,
     val icon: String,
-    val path: String
+)
+
+data class SubEmojiCategory(
+    val name : String,
+    val icon : String,
+    val assetPath: String,
+    val parentId : Int,
 )
