@@ -30,25 +30,21 @@ import com.frogobox.libkeyboard.ui.main.OnKeyboardActionListener
 // based on https://www.androidauthority.com/lets-build-custom-keyboard-android-832362/
 abstract class BaseKeyboardIME<VB : ViewBinding> : InputMethodService(), OnKeyboardActionListener, IKeyboardIME {
 
-    private val BUFFTER_FLY_RIGHT = "꧂";
-    private val BUFFTER_FLY_LEFT = "꧁";
-
-
     // how quickly do we have to doubletap shift to enable permanent caps lock
-    var SHIFT_PERM_TOGGLE_SPEED = 500
-    val KEYBOARD_LETTERS = 0
-    val KEYBOARD_SYMBOLS = 1
-    val KEYBOARD_SYMBOLS_SHIFT = 2
-    val KEYBOARD_NUMBER = 3
-    val KEYCODE_EMOJI = -6
+    private var SHIFT_PERM_TOGGLE_SPEED = 500
+    private val KEYBOARD_LETTERS = 0
+    private val KEYBOARD_SYMBOLS = 1
+    private val KEYBOARD_SYMBOLS_SHIFT = 2
+    private val KEYBOARD_NUMBER = 3
+    private val KEYCODE_EMOJI = -6
 
     var keyboard: ItemMainKeyboard? = null
 
-    var lastShiftPressTS = 0L
-    var keyboardMode = KEYBOARD_LETTERS
-    var inputTypeClass = InputType.TYPE_CLASS_TEXT
-    var enterKeyType = IME_ACTION_NONE
-    var switchToLetters = false
+    private var lastShiftPressTS = 0L
+    private var keyboardMode = KEYBOARD_LETTERS
+    private var inputTypeClass = InputType.TYPE_CLASS_TEXT
+    private var enterKeyType = IME_ACTION_NONE
+    private var switchToLetters = false
 
     var binding: VB? = null
 
@@ -116,7 +112,7 @@ abstract class BaseKeyboardIME<VB : ViewBinding> : InputMethodService(), OnKeybo
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onKey(code: Int) {
-        var inputConnection = currentInputConnection
+        val inputConnection = currentInputConnection
         onKeyExt(code, inputConnection)
     }
 
@@ -146,7 +142,7 @@ abstract class BaseKeyboardIME<VB : ViewBinding> : InputMethodService(), OnKeybo
     }
 
     override fun onText(text: String) {
-        currentInputConnection?.commitText(text, 0)
+        currentInputConnection?.commitText(text, 1)
     }
 
     override fun initialSetupKeyboard() {}
@@ -237,21 +233,23 @@ abstract class BaseKeyboardIME<VB : ViewBinding> : InputMethodService(), OnKeybo
 
                 if (TextUtils.isEmpty(selectedText)) {
 
-                    val currentText = inputConnection.getExtractedText(ExtractedTextRequest(), 0).text
+//                    val currentText = inputConnection.getExtractedText(ExtractedTextRequest(), 0).text
 
-                    val cTextLength = currentText.length
+//                    val cTextLength = currentText.length
 
-                    if(cTextLength == 3 && currentText.startsWith(BUFFTER_FLY_LEFT)  && currentText.endsWith(BUFFTER_FLY_RIGHT)){
-                        inputConnection.deleteSurroundingText(cTextLength, cTextLength)
-                    }else{
-                        inputConnection.sendKeyEvent(
-                            KeyEvent(
-                                KeyEvent.ACTION_DOWN,
-                                KeyEvent.KEYCODE_DEL
-                            )
+                    inputConnection.sendKeyEvent(
+                        KeyEvent(
+                            KeyEvent.ACTION_DOWN,
+                            KeyEvent.KEYCODE_DEL
                         )
-                        inputConnection.sendKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL))
-                    }
+                    )
+                    inputConnection.sendKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL))
+
+//                    if(cTextLength == 3 && currentText.startsWith(BUFFTER_FLY_LEFT)  && currentText.endsWith(BUFFTER_FLY_RIGHT)){
+//                        inputConnection.deleteSurroundingText(cTextLength, cTextLength)
+//                    }else{
+//
+//                    }
                 } else {
                     inputConnection.commitText("", 1)
                 }
@@ -329,6 +327,7 @@ abstract class BaseKeyboardIME<VB : ViewBinding> : InputMethodService(), OnKeybo
             }
             else -> {
                 var codeChar = code.toChar()
+
                 if (Character.isLetter(codeChar) && keyboard!!.mShiftState > SHIFT_OFF) {
                     codeChar = Character.toUpperCase(codeChar)
                 }
@@ -339,15 +338,7 @@ abstract class BaseKeyboardIME<VB : ViewBinding> : InputMethodService(), OnKeybo
                 val originalText =
                     inputConnection.getExtractedText(ExtractedTextRequest(), 0)?.text ?: return
 
-                var commitText = codeChar.toString()
-
-                var needSetNewCursorPos = false
-
-                // Just add emoij to this text once
-                if(originalText == "" && codeChar.isLetter()){
-                    commitText = "$BUFFTER_FLY_LEFT$commitText$BUFFTER_FLY_RIGHT"
-                    needSetNewCursorPos = true
-                }
+                val commitText = codeChar.toString()
 
                 if (keyboardMode != KEYBOARD_LETTERS && code == ItemMainKeyboard.KEYCODE_SPACE) {
                     inputConnection.commitText(commitText, 1)
@@ -357,11 +348,6 @@ abstract class BaseKeyboardIME<VB : ViewBinding> : InputMethodService(), OnKeybo
                     inputConnection.commitText(commitText, 1)
                 }
 
-
-                if(needSetNewCursorPos){
-                    val textWithoutBPos  = originalText.length - 1
-                    inputConnection.setSelection(textWithoutBPos , textWithoutBPos)
-                }
 
                 if (keyboard!!.mShiftState == SHIFT_ON_ONE_CHAR && keyboardMode == KEYBOARD_LETTERS) {
                     keyboard!!.mShiftState = SHIFT_OFF
@@ -409,21 +395,6 @@ abstract class BaseKeyboardIME<VB : ViewBinding> : InputMethodService(), OnKeybo
         candidatesStart: Int,
         candidatesEnd: Int
     ) {
-
-        // Move pos when needed
-        val currentText = currentInputConnection.getExtractedText(ExtractedTextRequest(), 0).text
-
-        val textWithoutBPos  = currentText.length - 1
-
-        if(currentText.endsWith(BUFFTER_FLY_RIGHT) && newSelEnd > textWithoutBPos){
-            currentInputConnection.setSelection(textWithoutBPos , textWithoutBPos)
-        }
-
-        if(currentText.startsWith(BUFFTER_FLY_LEFT) && newSelStart == 0){
-            currentInputConnection.setSelection(1 , 1)
-        }
-        //
-
         super.onUpdateSelection(
             oldSelStart,
             oldSelEnd,
