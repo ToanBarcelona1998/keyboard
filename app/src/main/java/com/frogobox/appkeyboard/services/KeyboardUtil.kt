@@ -62,7 +62,8 @@ class KeyboardUtil @Inject constructor(
             KeyboardThemeType.GREEN.mapToModel(),
             KeyboardThemeType.YELLOW.mapToModel(),
             KeyboardThemeType.BLUE.mapToModel(),
-            KeyboardThemeType.IMAGE_BG_DARK.mapToModel()
+            KeyboardThemeType.IMAGE_BG_DARK.mapToModel(),
+            KeyboardThemeType.IMAGE_BG_LIGHT.mapToModel(),
         )
     }
 

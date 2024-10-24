@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Keyboard xmlns:app="http://schemas.android.com/apk/res-auto">
+<Keyboard xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <Row>
         <Key
             app:keyEdgeFlags="left"
@@ -64,6 +65,7 @@
         <Key
             app:code="32"
             app:isRepeatable="true"
+            app:keyLabel="Space"
             app:keyWidth="48%p" />
         <Key
             app:keyLabel="."

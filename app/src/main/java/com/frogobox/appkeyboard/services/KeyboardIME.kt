@@ -47,13 +47,13 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
 
             val background = pref.getPrefInt(
                 KeyboardUtil.KEYBOARD_COLOR,
-                R.color.color_bg_keyboard_default
+                R.drawable.bg_main_keyboard
             )
 
             val backgroundType = ThemeType.valueOf(
                 pref.getPrefString(
                     KeyboardUtil.KEYBOARD_COLOR_TYPE,
-                    ThemeType.COLOR.name
+                    ThemeType.IMAGE.name
                 )
             )
 

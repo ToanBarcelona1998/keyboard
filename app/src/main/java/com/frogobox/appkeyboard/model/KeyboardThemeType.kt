@@ -26,7 +26,8 @@ enum class KeyboardThemeType(
     GREEN("Green", "Green Color", ThemeType.COLOR, R.color.color_bg_keyboard_green),
     YELLOW("Yellow", "Yellow Color", ThemeType.COLOR, R.color.color_bg_keyboard_yellow),
     BLUE("Blue", "Blue Color", ThemeType.COLOR, R.color.color_bg_keyboard_blue),
-    IMAGE_BG_DARK("Image", "Sample Wallpaper", ThemeType.IMAGE, R.drawable.ic_wallpaper_dummy);
+    IMAGE_BG_DARK("Image", "Sample Wallpaper", ThemeType.IMAGE, R.drawable.ic_wallpaper_dummy),
+    IMAGE_BG_LIGHT("Image default", "Sample Wallpaper Default", ThemeType.IMAGE, R.drawable.bg_main_keyboard);
 
     fun mapToModel(): KeyboardThemeModel {
         return KeyboardThemeModel(

@@ -163,6 +163,7 @@
         <Key
             app:code="32"
             app:isRepeatable="true"
+            app:keyLabel="Space"
             app:keyWidth="40%p" />
         <Key
             app:keyLabel="."
