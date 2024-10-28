@@ -71,7 +71,7 @@ fun getSubEmojiCategory(id: Int) : List<SubEmojiCategory>  {
         SubEmojiCategory(SubEmojiCategoryType.CUTE.icon, SubEmojiCategoryType.CUTE.icon, SubEmojiCategoryType.CUTE.path,SubEmojiCategoryType.CUTE.parentId),
         SubEmojiCategory(SubEmojiCategoryType.EXCITED.icon, SubEmojiCategoryType.EXCITED.icon, SubEmojiCategoryType.EXCITED.path,SubEmojiCategoryType.EXCITED.parentId),
         SubEmojiCategory(SubEmojiCategoryType.SAD.icon, SubEmojiCategoryType.SAD.icon, SubEmojiCategoryType.SAD.path,SubEmojiCategoryType.SAD.parentId),
-        SubEmojiCategory(SubEmojiCategoryType.SURPRISED.icon, SubEmojiCategoryType.SURPRISED.icon, SubEmojiCategoryType.SURPRISED.path,SubEmojiCategoryType.SURPRISED.parentId),
+        SubEmojiCategory(SubEmojiCategoryType.SURPRISE.icon, SubEmojiCategoryType.SURPRISE.icon, SubEmojiCategoryType.SURPRISE.path,SubEmojiCategoryType.SURPRISE.parentId),
         SubEmojiCategory(SubEmojiCategoryType.SHOCKED.icon, SubEmojiCategoryType.SHOCKED.icon, SubEmojiCategoryType.SHOCKED.path,SubEmojiCategoryType.SHOCKED.parentId),
         SubEmojiCategory(SubEmojiCategoryType.EMBARRASSED.icon, SubEmojiCategoryType.EMBARRASSED.icon, SubEmojiCategoryType.EMBARRASSED.path,SubEmojiCategoryType.EMBARRASSED.parentId),
         SubEmojiCategory(SubEmojiCategoryType.CRYING.icon, SubEmojiCategoryType.CRYING.icon, SubEmojiCategoryType.CRYING.path,SubEmojiCategoryType.CRYING.parentId),

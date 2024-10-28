@@ -32,9 +32,9 @@ enum class SubEmojiCategoryType(val icon: String, val path: String,val parentId 
     //
     HAPPY("Happy" , path = "funny_text/happy.txt",1),
     CUTE("Cute" , path = "funny_text/cute.txt",1),
-    EXCITED("Cute" , path = "funny_text/exited.txt",1),
+    EXCITED("Exited" , path = "funny_text/excited.txt",1),
     SAD("Sad" , path = "funny_text/sad.txt",1),
-    SURPRISED("Surprised" , path = "funny_text/surprised.txt",1),
+    SURPRISE("Surprise" , path = "funny_text/surprise.txt",1),
     SHOCKED("Shocked" , path = "funny_text/shocked.txt",1),
     EMBARRASSED("Embarrassed" , path = "funny_text/embarrassed.txt",1),
     CRYING("Crying" , path = "funny_text/crying.txt",1),
