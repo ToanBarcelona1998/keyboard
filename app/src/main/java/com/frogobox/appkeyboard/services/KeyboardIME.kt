@@ -17,6 +17,7 @@ import com.frogobox.appkeyboard.model.KeyboardFeatureType
 import com.frogobox.appkeyboard.model.ThemeType
 import com.frogobox.appkeyboard.ui.main.MainActivity
 import com.frogobox.libkeyboard.common.core.BaseKeyboardIME
+import com.frogobox.libkeyboard.common.ext.isDarkThemeOn
 import com.frogobox.recycler.core.FrogoRecyclerNotifyListener
 import com.frogobox.recycler.core.IFrogoBindingAdapter
 import com.frogobox.recycler.ext.injectorBinding
@@ -38,6 +39,7 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
     @Inject
     lateinit var keyboardUtil: KeyboardUtil
 
+
     override fun setupViewBinding(): KeyboardImeBinding {
         return KeyboardImeBinding.inflate(LayoutInflater.from(this), null, false)
     }
@@ -45,9 +47,15 @@ class KeyboardIME : BaseKeyboardIME<KeyboardImeBinding>() {
     override fun setupTheme() {
         binding?.apply {
 
+            var defaultBgColor = R.drawable.bg_main_keyboard
+
+            if(isDarkThemeOn()){
+                defaultBgColor = R.drawable.ic_wallpaper_dummy
+            }
+
             val background = pref.getPrefInt(
                 KeyboardUtil.KEYBOARD_COLOR,
-                R.drawable.bg_main_keyboard
+                defaultBgColor
             )
 
             val backgroundType = ThemeType.valueOf(
