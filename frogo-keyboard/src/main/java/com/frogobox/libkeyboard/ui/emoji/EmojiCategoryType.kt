@@ -12,7 +12,7 @@ package com.frogobox.libkeyboard.ui.emoji
 
 enum class EmojiCategoryType (val id : Int , val icon: String) {
     Emoji(id = 0 , icon = "\uD83D\uDE42"),
-    FunnyText(id = 1 , icon = ":-)"),
+    FunnyText(id = 1 , icon = "≧°◡°≦"),
     Sticker(id = 2 , icon = "\uD83D\uDE42"),
     Other(id = 3 , icon = "Gif"),
 }

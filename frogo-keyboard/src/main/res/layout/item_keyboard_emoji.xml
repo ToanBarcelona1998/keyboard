@@ -2,10 +2,12 @@
 <androidx.appcompat.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/tv_emoji"
-    android:layout_width="@dimen/emoji_item_size"
+    android:layout_width="wrap_content"
+    android:minWidth="@dimen/emoji_item_size"
     android:layout_height="@dimen/emoji_item_size"
     android:background="@drawable/keypad_emoji"
     android:gravity="center"
     android:textAppearance="@style/TextAppearance.AppCompat.Button"
     android:textSize="@dimen/emoji_text_size"
+    android:paddingRight="@dimen/funny_text_padding"
     tools:text="😇" />

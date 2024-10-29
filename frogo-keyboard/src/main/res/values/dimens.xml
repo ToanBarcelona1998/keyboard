@@ -3,7 +3,7 @@
     <!-- Keyboard Dimen   -->
     <dimen name="key_height">52dp</dimen>
     <dimen name="key_margin">3dp</dimen>
-    <dimen name="funny_text_padding">4dp</dimen>
+    <dimen name="funny_text_padding">8dp</dimen>
     <dimen name="key_normal_radius">8dp</dimen>
     <dimen name="key_action_radius">16dp</dimen>
     <dimen name="top_small_number_margin_width">12dp</dimen>
