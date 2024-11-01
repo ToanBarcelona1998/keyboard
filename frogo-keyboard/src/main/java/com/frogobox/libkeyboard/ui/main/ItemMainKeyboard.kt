@@ -239,8 +239,13 @@ class ItemMainKeyboard {
             topSmallNumber = a.getString(R.styleable.FrogoKeyboard_Key_topSmallNumber) ?: ""
 
             if (label.isNotEmpty() && code != KEYCODE_MODE_CHANGE && code != KEYCODE_SHIFT) {
-                code = label[0].code
+                code = if(code == KEYCODE_SPACE){
+                    " "[0].code
+                }else{
+                    label[0].code
+                }
             }
+
             a.recycle()
         }
 
